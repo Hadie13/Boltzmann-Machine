@@ -95,6 +95,7 @@ for epoch in range(1, nb_epoch + 1):
         phk,_ = rbm.sample_h(vk)
         rbm.train(v0, vk, ph0, phk)
         train_loss += torch.mean(torch.abs(v0[v0>=0] - vk[v0>=0]))
+        train_loss += np.sqrt(torch.mean((v0[v0>=0] - vk[v0>=0])**2)) # RMSE => permet d'évaluer le modèle d'entraînement
         s += 1.
     print('epoch: '+str(epoch)+' loss: '+str(train_loss/s))
     
@@ -110,6 +111,7 @@ for id_user in range(nb_users):
         _,h = rbm.sample_h(v)
         _,v = rbm.sample_v(h)
         test_loss += torch.mean(torch.abs(vt[vt>=0] - v[vt>=0]))
+        test_loss += np.sqrt(torch.mean((vt[vt>=0] - v[vt>=0])**2)) # RMSE du jeu de test
         s += 1.
 print('test loss: '+str(test_loss/s)) 
 # notre fonction de coût dans le jeu de test est meilleur que la fonction de coût du jeu d'entraînement : nous n'avons pas de 
